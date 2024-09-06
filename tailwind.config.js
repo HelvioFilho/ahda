@@ -10,6 +10,9 @@ module.exports = {
     extend: {
       colors,
       fontFamily,
+      borderWidth: {
+        0.8: "0.8px",
+      },
     },
   },
   plugins: [],
