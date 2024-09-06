@@ -11,6 +11,7 @@ export const colors = {
 
   background: "#F1F1F1",
   backgroundModal: "rgba(0,0,0,0.8)",
+  header: "rgba(0, 0, 0, 0.3)",
   mark: "#F64F64",
   splash: "#CAEAF5",
 
