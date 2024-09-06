@@ -1,30 +1,30 @@
 {
   "expo": {
-    "name": "ahda",
+    "name": "A hora do anjo",
     "slug": "ahda",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./src/assets/main/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./src/assets/main/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#CAEAF5"
     },
     "ios": {
+      "bundleIdentifier": "com.hsvf.ahda",
       "supportsTablet": true
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+      "package": "com.hsvf.ahda"
     },
     "web": {
       "bundler": "metro"
     },
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "description": "Radio A hora do Anjo app, a Catholic radio station created in the city of Novo Repartimento.",
+    "githubUrl": "https://github.com/HelvioFilho/ahda"
   }
 }
