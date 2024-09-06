@@ -1,5 +1,10 @@
-import { Home } from "@/screens/Home";
 import "@/styles/global.css";
+
+import { SafeAreaView, StatusBar } from "react-native";
+
+import { Routes } from "@/routes";
+
+import { colors } from "@/styles/colors";
 
 import {
   Roboto_400Regular,
@@ -7,8 +12,6 @@ import {
   Roboto_700Bold,
   useFonts,
 } from "@expo-google-fonts/roboto";
-
-import { Text, View } from "react-native";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -21,5 +24,10 @@ export default function App() {
     return null;
   }
 
-  return <Home />;
+  return (
+    <SafeAreaView className="flex-1">
+      <StatusBar backgroundColor={colors.background} barStyle="dark-content" />
+      <Routes />
+    </SafeAreaView>
+  );
 }
