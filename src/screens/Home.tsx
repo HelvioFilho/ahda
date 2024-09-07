@@ -1,6 +1,15 @@
+import { useState } from "react";
+import { FlatList, RefreshControl, Text, View } from "react-native";
+import { useInfiniteQuery } from "@tanstack/react-query";
+
 import { Header } from "@/components/Header";
+import { Loading } from "@/components/Loading";
 import { PostList } from "@/components/PostList";
-import { FlatList, Text, View } from "react-native";
+
+import { api } from "@/services/api";
+import { colors } from "@/styles/colors";
+
+const KEY = process.env.EXPO_PUBLIC_API_KEY;
 
 export type PostProps = {
   id: string;
@@ -18,32 +27,94 @@ export type PostProps = {
 };
 
 export function Home() {
-  const posts: PostProps[] = [
-    {
-      id: "1",
-      title: "Curiosidades do Cristianismo",
-      text: "Text 1",
-      preview:
-        "A primeira igreja católica de Belém, conhecida como a Catedral Metropolitana de Belém, ou Catedral da Sé, foi fundada em 1616, logo após a fundação da cidade pelos portugueses.",
-      user: {
-        name: "Hélvio Filho",
-        image: "https://avatars.githubusercontent.com/u/14864367",
-        about: "About 1",
-      },
-      youtube: "https://www.youtube.com/watch?v=Phj08UZbCUs",
-      cover:
-        "https://upload.wikimedia.org/wikipedia/commons/d/da/Belem-Merces2.jpg",
-      date_post: "17/02/2023 10:25",
+  const size = 2;
+  const [visibleWarning, setVisibleWarning] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const getPosts = async ({ pageParam = 1 }) => {
+    const { data } = await api.get(
+      `get_post?page=${pageParam}&size=${size}&key=${KEY}`
+    );
+    return { ...data, pageParam };
+  };
+
+  const {
+    data,
+    status,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["getPost"],
+    queryFn: getPosts,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.pageParam < lastPage.count) {
+        return lastPage.pageParam + 1;
+      }
+      return undefined;
     },
-  ];
+    initialPageParam: 1,
+  });
+
+  if (status === "pending") {
+    return (
+      <View className="flex-1 w-full bg-background">
+        <Loading size={50} />
+      </View>
+    );
+  }
+
+  const postCount = data?.pages.flatMap((page) => page.data).length || 0;
+
   return (
     <View className="flex-1 w-full bg-background">
       <FlatList
-        data={posts}
+        data={data?.pages.flatMap((data) => data.data as PostProps)}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <PostList data={item} />}
-        ListHeaderComponent={() => <Header />}
-        ListEmptyComponent={() => <Text>Empty</Text>}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={async () => {
+              setRefreshing(true);
+              await refetch();
+              setRefreshing(false);
+            }}
+            tintColor={colors.tabBarColor.active}
+            colors={[colors.tabBarColor.active]}
+          />
+        }
+        onEndReachedThreshold={0.1}
+        onEndReached={async () => {
+          await fetchNextPage();
+          if (!hasNextPage) {
+            if (!visibleWarning) {
+              setVisibleWarning(true);
+            }
+          } else {
+            setVisibleWarning(false);
+          }
+        }}
+        ListHeaderComponent={<Header />}
+        ListEmptyComponent={
+          <View className="w-full items-center justify-center mt-5">
+            <Text className="text-lg font-regular">
+              Ainda não há publicações.
+            </Text>
+          </View>
+        }
+        ListFooterComponent={
+          isFetchingNextPage ? (
+            <Loading size={32} />
+          ) : !hasNextPage && visibleWarning && postCount > 0 ? (
+            <Text className="text-base font-regular pt-1 pb-12 text-center">
+              Não há mais publicações a serem exibidas!
+            </Text>
+          ) : (
+            <></>
+          )
+        }
         showsVerticalScrollIndicator={false}
       />
     </View>

@@ -1,6 +1,7 @@
 import "@/styles/global.css";
 
 import { SafeAreaView, StatusBar } from "react-native";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { Routes } from "@/routes";
 
@@ -12,6 +13,8 @@ import {
   Roboto_700Bold,
   useFonts,
 } from "@expo-google-fonts/roboto";
+
+const queryClient = new QueryClient();
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -25,9 +28,14 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView className="flex-1">
-      <StatusBar backgroundColor={colors.background} barStyle="dark-content" />
-      <Routes />
-    </SafeAreaView>
+    <QueryClientProvider client={queryClient}>
+      <SafeAreaView className="flex-1">
+        <StatusBar
+          backgroundColor={colors.background}
+          barStyle="dark-content"
+        />
+        <Routes />
+      </SafeAreaView>
+    </QueryClientProvider>
   );
 }
