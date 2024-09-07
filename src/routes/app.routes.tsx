@@ -1,9 +1,10 @@
 import { colors } from "@/styles/colors";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { Home } from "@/screens/Home";
+import { Search } from "@/screens/Search";
 
 const { Navigator, Screen } = createNativeStackNavigator();
 function HomeScreen() {
@@ -49,6 +50,16 @@ export function AppRoute() {
               color={color}
             />
           ),
+        }}
+      />
+      <Screen
+        name="Busca"
+        component={Search}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="magnify" size={33} color={color} />
+          ),
+          tabBarHideOnKeyboard: true,
         }}
       />
     </Navigator>
