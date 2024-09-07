@@ -107,7 +107,7 @@ export function Home() {
         ListFooterComponent={
           isFetchingNextPage ? (
             <Loading size={32} />
-          ) : !hasNextPage && visibleWarning && postCount > 0 ? (
+          ) : !hasNextPage && visibleWarning && postCount > 1 ? (
             <Text className="text-base font-regular pt-1 pb-12 text-center">
               Não há mais publicações a serem exibidas!
             </Text>
