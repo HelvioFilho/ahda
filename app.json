@@ -24,6 +24,15 @@
     "experiments": {
       "typedRoutes": true
     },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./src/assets/main/notification.png",
+          "color": "#CAEAF5"
+        }
+      ]
+    ],
     "description": "Radio A hora do Anjo app, a Catholic radio station created in the city of Novo Repartimento.",
     "githubUrl": "https://github.com/HelvioFilho/ahda"
   }
