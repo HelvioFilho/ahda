@@ -16,7 +16,7 @@ export function About({ closeModal }: AboutProps) {
           <Ionicons name="close-circle" size={30} color={colors.error} />
         </Pressable>
         <View className="w-11/12 pt-1 pr-1 pb-8 pl-4">
-          <Text className="text-lg font-bold text-center mb-5">
+          <Text className="text-xl font-bold text-center mb-5">
             A Hora do Anjo
           </Text>
           <View className="flex-row my-1">
