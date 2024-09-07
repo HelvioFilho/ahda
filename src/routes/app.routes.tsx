@@ -1,10 +1,15 @@
 import { colors } from "@/styles/colors";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  Ionicons,
+  MaterialCommunityIcons,
+  EvilIcons,
+} from "@expo/vector-icons";
 
 import { Home } from "@/screens/Home";
 import { Search } from "@/screens/Search";
+import { Message } from "@/screens/Message";
 
 const { Navigator, Screen } = createNativeStackNavigator();
 function HomeScreen() {
@@ -43,6 +48,7 @@ export function AppRoute() {
         name="HomeAndPost"
         component={HomeScreen}
         options={{
+          tabBarLabel: "Home",
           tabBarIcon: ({ focused, color }) => (
             <Ionicons
               name={focused ? "home-sharp" : "home-outline"}
@@ -58,6 +64,16 @@ export function AppRoute() {
         options={{
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="magnify" size={33} color={color} />
+          ),
+          tabBarHideOnKeyboard: true,
+        }}
+      />
+      <Screen
+        name="Mensagem"
+        component={Message}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <EvilIcons name="envelope" size={37} color={color} />
           ),
           tabBarHideOnKeyboard: true,
         }}
