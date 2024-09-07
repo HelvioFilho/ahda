@@ -25,18 +25,8 @@ export function InputMessage<T extends FieldValues>({
         {label}
       </Text>
       <View
-        className={`
-            w-full
-            flex-row
-            items-center
-            px-5
-            py-2.5
-            rounded-md
-            bg-light
-            border
-            border-inputBorder
-            h-[${changeHeight}px]
-          `}
+        className="w-full flex-row items-center px-5 py-2.5 bg-light border border-inputBorder rounded-md"
+        style={{ height: changeHeight }}
       >
         <Controller
           control={control}
