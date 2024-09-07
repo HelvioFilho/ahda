@@ -10,6 +10,7 @@ import {
 import { Home } from "@/screens/Home";
 import { Search } from "@/screens/Search";
 import { Message } from "@/screens/Message";
+import { Settings } from "@/screens/Settings";
 
 const { Navigator, Screen } = createNativeStackNavigator();
 function HomeScreen() {
@@ -74,6 +75,20 @@ export function AppRoute() {
         options={{
           tabBarIcon: ({ color }) => (
             <EvilIcons name="envelope" size={37} color={color} />
+          ),
+          tabBarHideOnKeyboard: true,
+        }}
+      />
+      <Screen
+        name="Opções"
+        component={Settings}
+        options={{
+          tabBarIcon: ({ focused, color }) => (
+            <Ionicons
+              name={focused ? "settings" : "settings-outline"}
+              size={30}
+              color={color}
+            />
           ),
           tabBarHideOnKeyboard: true,
         }}
