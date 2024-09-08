@@ -14,6 +14,7 @@
     "ios": {
       "bundleIdentifier": "com.hsvf.ahda",
       "supportsTablet": true,
+      "requireFullScreen": true,
       "infoPlist": {
         "UIBackgroundModes": ["audio"]
       }
@@ -34,6 +35,12 @@
         {
           "icon": "./src/assets/main/notification.png",
           "color": "#CAEAF5"
+        }
+      ],
+      [
+        "expo-screen-orientation",
+        {
+          "initialOrientation": "DEFAULT"
         }
       ]
     ],
