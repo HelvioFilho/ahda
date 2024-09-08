@@ -13,10 +13,14 @@
     },
     "ios": {
       "bundleIdentifier": "com.hsvf.ahda",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "UIBackgroundModes": ["audio"]
+      }
     },
     "android": {
-      "package": "com.hsvf.ahda"
+      "package": "com.hsvf.ahda",
+      "permissions": ["RECEIVE_BOOT_COMPLETED"]
     },
     "web": {
       "bundler": "metro"
