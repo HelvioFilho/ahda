@@ -1,5 +1,42 @@
-import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
+import TrackPlayer, {
+  Capability,
+  AppKilledPlaybackBehavior,
+} from "react-native-track-player";
+import * as Notifications from "expo-notifications";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { DataBibleProps, SettingsProps } from "./store";
+import { bible } from "./api";
+
+const ASYNC_KEY = process.env.EXPO_PUBLIC_ASYNC_KEY;
+
+type StartSettingsProps = {
+  settings: SettingsProps;
+  bible: DataBibleProps;
+};
+
+export async function SetupTrackPlayer(): Promise<boolean> {
+  let isSetup = false;
+
+  try {
+    await TrackPlayer.getActiveTrackIndex();
+    isSetup = true;
+  } catch (error) {
+    await TrackPlayer.setupPlayer();
+    await TrackPlayer.updateOptions({
+      android: {
+        appKilledPlaybackBehavior: AppKilledPlaybackBehavior.ContinuePlayback,
+      },
+      capabilities: [Capability.Play, Capability.Pause],
+      compactCapabilities: [Capability.Play, Capability.Pause],
+      notificationCapabilities: [Capability.Play, Capability.Pause],
+    });
+    isSetup = true;
+  } finally {
+    return isSetup;
+  }
+}
 
 export async function VerifyNotifications() {
   const settings = await Notifications.getPermissionsAsync();
@@ -73,4 +110,41 @@ export async function CheckActiveNotifications() {
     await Notifications.cancelAllScheduledNotificationsAsync();
     await ScheduleNotifications();
   }
+}
+
+export async function SetupStartSettings(): Promise<StartSettingsProps> {
+  let data = {} as StartSettingsProps;
+
+  try {
+    const response = await AsyncStorage.getItem(ASYNC_KEY as string);
+    const settings = response ? JSON.parse(response) : ({} as SettingsProps);
+    const { data } = await bible.get("/verses/ra/random").catch(() => {
+      return {
+        data: {
+          book: {
+            name: "Eclesiastes",
+          },
+          chapter: 9,
+          number: 10,
+          text: "Posso todas as coisas em Cristo que me fortalece.",
+        },
+      };
+    });
+    let bibleData = {} as DataBibleProps;
+    if (typeof data === "object" && Object.keys(data).length > 0) {
+      bibleData = {
+        book: data.book.name,
+        chapter: data.chapter,
+        number: data.number,
+        text: data.text,
+      };
+    }
+    return {
+      settings,
+      bible: bibleData,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+  return data;
 }
