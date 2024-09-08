@@ -1,4 +1,5 @@
-import { colors } from "@/styles/colors";
+import { useEffect, useState } from "react";
+import { Keyboard } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
@@ -11,6 +12,9 @@ import { Home } from "@/screens/Home";
 import { Search } from "@/screens/Search";
 import { Message } from "@/screens/Message";
 import { Settings } from "@/screens/Settings";
+import { PlayButton } from "@/components/PlayButton";
+
+import { colors } from "@/styles/colors";
 
 const { Navigator, Screen } = createNativeStackNavigator();
 function HomeScreen() {
@@ -26,7 +30,20 @@ function HomeScreen() {
 }
 
 export function AppRoute() {
+  const [showKeyboard, setShowKeyboard] = useState<boolean | undefined>(
+    undefined
+  );
   const { Navigator, Screen } = createBottomTabNavigator();
+
+  useEffect(() => {
+    Keyboard.addListener("keyboardDidHide", () => setShowKeyboard(false));
+    Keyboard.addListener("keyboardDidShow", () => setShowKeyboard(true));
+
+    return () => {
+      Keyboard.removeAllListeners("keyboardDidHide");
+      Keyboard.removeAllListeners("keyboardDidShow");
+    };
+  }, []);
 
   return (
     <Navigator
@@ -67,6 +84,14 @@ export function AppRoute() {
             <MaterialCommunityIcons name="magnify" size={33} color={color} />
           ),
           tabBarHideOnKeyboard: true,
+        }}
+      />
+      <Screen
+        name="Play"
+        component={PlayButton}
+        options={{
+          tabBarLabel: "",
+          tabBarButton: () => (showKeyboard ? null : <PlayButton />),
         }}
       />
       <Screen
