@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const { BASE_URL } = process.env;
-const { TOKEN_B } = process.env;
+const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
+const TOKEN_B = process.env.EXPO_PUBLIC_TOKEN_B;
 
 const bibleUrl = "https://www.abibliadigital.com.br/api";
 
