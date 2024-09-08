@@ -63,60 +63,60 @@ export function Home() {
         <Loading size={50} />
       </View>
     );
-  }
+  } else if (status === "success") {
+    const postCount = data?.pages.flatMap((page) => page.data).length || 0;
 
-  const postCount = data?.pages.flatMap((page) => page.data).length || 0;
-
-  return (
-    <View className="flex-1 w-full bg-background">
-      <FlatList
-        data={data?.pages.flatMap((data) => data.data as PostProps)}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <PostList data={item} />}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={async () => {
-              setRefreshing(true);
-              await refetch();
-              setRefreshing(false);
-            }}
-            tintColor={colors.tabBarColor.active}
-            colors={[colors.tabBarColor.active]}
-          />
-        }
-        onEndReachedThreshold={0.1}
-        onEndReached={async () => {
-          await fetchNextPage();
-          if (!hasNextPage) {
-            if (!visibleWarning) {
-              setVisibleWarning(true);
-            }
-          } else {
-            setVisibleWarning(false);
+    return (
+      <View className="flex-1 w-full bg-background">
+        <FlatList
+          data={data?.pages.flatMap((data) => data.data as PostProps)}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <PostList data={item} />}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={async () => {
+                setRefreshing(true);
+                await refetch();
+                setRefreshing(false);
+              }}
+              tintColor={colors.tabBarColor.active}
+              colors={[colors.tabBarColor.active]}
+            />
           }
-        }}
-        ListHeaderComponent={<Header />}
-        ListEmptyComponent={
-          <View className="w-full items-center justify-center mt-5">
-            <Text className="text-lg font-regular">
-              Ainda não há publicações.
-            </Text>
-          </View>
-        }
-        ListFooterComponent={
-          isFetchingNextPage ? (
-            <Loading size={32} />
-          ) : !hasNextPage && visibleWarning && postCount > 1 ? (
-            <Text className="text-base font-regular pt-1 pb-12 text-center">
-              Não há mais publicações a serem exibidas!
-            </Text>
-          ) : (
-            <></>
-          )
-        }
-        showsVerticalScrollIndicator={false}
-      />
-    </View>
-  );
+          onEndReachedThreshold={0.1}
+          onEndReached={async () => {
+            await fetchNextPage();
+            if (!hasNextPage) {
+              if (!visibleWarning) {
+                setVisibleWarning(true);
+              }
+            } else {
+              setVisibleWarning(false);
+            }
+          }}
+          ListHeaderComponent={<Header />}
+          ListEmptyComponent={
+            <View className="w-full items-center justify-center mt-5">
+              <Text className="text-lg font-regular">
+                Ainda não há publicações.
+              </Text>
+            </View>
+          }
+          ListFooterComponent={
+            isFetchingNextPage ? (
+              <Loading size={32} />
+            ) : !hasNextPage && visibleWarning && postCount > 1 ? (
+              <Text className="text-base font-regular pt-1 pb-12 text-center">
+                Não há mais publicações a serem exibidas!
+              </Text>
+            ) : (
+              <></>
+            )
+          }
+          showsVerticalScrollIndicator={false}
+        />
+      </View>
+    );
+  }
 }
