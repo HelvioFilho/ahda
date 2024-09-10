@@ -3,7 +3,6 @@
     "name": "A hora do anjo",
     "slug": "ahda",
     "version": "1.0.0",
-    "orientation": "portrait",
     "icon": "./src/assets/main/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
