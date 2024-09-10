@@ -12,6 +12,8 @@ import { Home } from "@/screens/Home";
 import { Search } from "@/screens/Search";
 import { Message } from "@/screens/Message";
 import { Settings } from "@/screens/Settings";
+import { Post } from "@/screens/Post";
+
 import { PlayButton } from "@/components/PlayButton";
 
 import { colors } from "@/styles/colors";
@@ -25,6 +27,20 @@ function HomeScreen() {
       }}
     >
       <Screen name="Home" component={Home} />
+      <Screen name="Post" component={Post} />
+    </Navigator>
+  );
+}
+
+function SearchScreen() {
+  return (
+    <Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Screen name="Search" component={Search} />
+      <Screen name="Post" component={Post} />
     </Navigator>
   );
 }
@@ -78,7 +94,7 @@ export function AppRoute() {
       />
       <Screen
         name="Busca"
-        component={Search}
+        component={SearchScreen}
         options={{
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="magnify" size={33} color={color} />
