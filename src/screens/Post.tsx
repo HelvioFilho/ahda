@@ -36,6 +36,7 @@ export function Post() {
   const [text, setText] = useState("<p></p>");
   const [loading, setLoading] = useState(true);
   const [youtubeLoading, setYoutubeLoading] = useState(true);
+  const [loadingTimeout, setLoadingTimeout] = useState(false);
 
   const { width: displayWidth } = Dimensions.get("window");
   const video_height = 230;
@@ -84,6 +85,16 @@ export function Post() {
     getMaxHeight();
   }, [data]);
 
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (youtubeLoading) {
+        setLoadingTimeout(true);
+      }
+    }, 20000);
+
+    return () => clearTimeout(timeoutId);
+  }, [youtubeLoading]);
+
   return (
     <>
       <ScrollView style={{ flex: 1, backgroundColor: colors.light }}>
@@ -120,7 +131,7 @@ export function Post() {
               tagsStyles={tagsStyles}
             />
           </View>
-          {!!data.youtube && (
+          {!!data.youtube && !loadingTimeout && (
             <View className="mb-2.5" style={{ height: video_height }}>
               <YoutubePlayer
                 videoId={data.youtube}
