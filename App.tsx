@@ -31,6 +31,7 @@ SplashScreen.preventAutoHideAsync();
 export default function App() {
   const [player, setPlayer] = useState(false);
   const [notification, setNotification] = useState(false);
+  const [setupOn, setSetupOn] = useState(false);
   const { setBible, setStartSettings } = appDataStore();
 
   const [fontsLoaded] = useFonts({
@@ -53,8 +54,6 @@ export default function App() {
     setStartSettings(isSettings.settings);
     setPlayer(isPlayer);
     setNotification(isNotification);
-
-    SplashScreen.hideAsync();
   }
 
   useEffect(() => {
@@ -63,9 +62,14 @@ export default function App() {
     }
   }, [notification]);
 
-  if (!fontsLoaded) {
-    return null;
-  }
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      SplashScreen.hideAsync();
+      setSetupOn(true);
+    }, 2000);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -74,7 +78,7 @@ export default function App() {
           backgroundColor={colors.background}
           barStyle="dark-content"
         />
-        <Routes />
+        {fontsLoaded && setupOn && <Routes />}
       </SafeAreaView>
     </QueryClientProvider>
   );
