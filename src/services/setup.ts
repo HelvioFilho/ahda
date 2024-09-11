@@ -7,7 +7,7 @@ import * as Notifications from "expo-notifications";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { DataBibleProps, SettingsProps } from "./store";
-import { api } from "./api";
+import { bible } from "./api";
 
 const ASYNC_KEY = process.env.EXPO_PUBLIC_ASYNC_KEY;
 
@@ -118,7 +118,7 @@ export async function SetupStartSettings(): Promise<StartSettingsProps> {
   try {
     const response = await AsyncStorage.getItem(ASYNC_KEY as string);
     const settings = response ? JSON.parse(response) : ({} as SettingsProps);
-    const { data } = await api.get("get_bible").catch(() => {
+    const { data } = await bible.get("/verses/ra/random").catch(() => {
       return {
         data: {
           book: {

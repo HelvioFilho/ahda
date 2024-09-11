@@ -8,6 +8,7 @@ import { PostList } from "@/components/PostList";
 
 import { api } from "@/services/api";
 import { colors } from "@/styles/colors";
+import { BibleModal } from "@/components/BibleModal";
 
 const KEY = process.env.EXPO_PUBLIC_API_KEY;
 
@@ -116,6 +117,7 @@ export function Home() {
           }
           showsVerticalScrollIndicator={false}
         />
+        <BibleModal />
       </View>
     );
   }
