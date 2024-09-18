@@ -1,13 +1,55 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, Pressable, Text, View } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "@/styles/colors";
-import { appDataStore } from "@/services/store";
+import { bible as bibleAPI } from "@/services/api";
+import { Loading } from "./Loading";
+
+export type DataBibleProps = {
+  book: string;
+  chapter: number;
+  number: number;
+  text: string;
+};
 
 export function BibleModal() {
   const [visible, setVisible] = useState(true);
-  const { bible } = appDataStore();
+  const [bible, setBible] = useState<DataBibleProps>({} as DataBibleProps);
+  const [loading, setLoading] = useState(true);
+
+  async function getBible() {
+    try {
+      const { data } = await bibleAPI.get("/verses/ra/random").catch(() => {
+        return {
+          data: {
+            book: {
+              name: "Eclesiastes",
+            },
+            chapter: 9,
+            number: 10,
+            text: "Posso todas as coisas em Cristo que me fortalece.",
+          },
+        };
+      });
+      if (typeof data === "object" && Object.keys(data).length > 0) {
+        setBible({
+          book: data.book.name,
+          chapter: data.chapter,
+          number: data.number,
+          text: data.text,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    getBible();
+  }, []);
 
   return (
     <Modal
@@ -28,12 +70,18 @@ export function BibleModal() {
             </Pressable>
           </View>
           <View className="w-3/4 h-px bg-dark  my-3.5" />
-          <Text className="text-lg font-bold self-start ml-7 pt-2.5 pb-2 tracking-widest">{`Livro: ${bible.book}`}</Text>
+          <Text className="text-lg font-bold self-start ml-7 pt-2.5 pb-2 tracking-widest">{`Livro: ${
+            loading ? "Carregando..." : bible.book
+          }`}</Text>
           <View className="w-full py-2.5 px-7">
-            <Text className="text-base font-regular text-justify">
-              <Text className="text-base font-medium">{`${bible.chapter}:${bible.number} - `}</Text>
-              {bible.text}
-            </Text>
+            {loading ? (
+              <Loading size={32} />
+            ) : (
+              <Text className="text-base font-regular text-justify">
+                <Text className="text-base font-medium">{`${bible.chapter}:${bible.number} - `}</Text>
+                {bible.text}
+              </Text>
+            )}
           </View>
         </View>
       </View>
