@@ -1,19 +1,13 @@
 import "@/styles/global.css";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { SafeAreaView, StatusBar } from "react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import * as SplashScreen from "expo-splash-screen";
 
 import { Routes } from "@/routes";
 
-import {
-  CheckActiveNotifications,
-  SetupNotifications,
-  SetupStartSettings,
-  SetupTrackPlayer,
-} from "@/services/setup";
-import { appDataStore } from "@/services/store";
+import { setupStartSettings, setupTrackPlayer } from "@/services/setup";
 
 import { colors } from "@/styles/colors";
 
@@ -23,62 +17,49 @@ import {
   Roboto_700Bold,
   useFonts,
 } from "@expo-google-fonts/roboto";
+import { appDataStore } from "@/services/store";
 
 const queryClient = new QueryClient();
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const [player, setPlayer] = useState(false);
-  const [notification, setNotification] = useState(false);
-  const [setupOn, setSetupOn] = useState(false);
-  const { setBible, setStartSettings } = appDataStore();
-
   const [fontsLoaded] = useFonts({
     Roboto_400Regular,
     Roboto_500Medium,
     Roboto_700Bold,
   });
 
-  async function getSetup() {
-    const isSettings = await SetupStartSettings();
-    const isPlayer = await SetupTrackPlayer();
-    const isNotification = await SetupNotifications();
-    if (isSettings) {
-      if (isSettings.settings.notification) {
-        await CheckActiveNotifications();
-      }
-    }
-
-    setBible(isSettings.bible);
-    setStartSettings(isSettings.settings);
-    setPlayer(isPlayer);
-    setNotification(isNotification);
-  }
+  const { setStartSettings } = appDataStore();
 
   useEffect(() => {
-    if (!player && !notification) {
-      getSetup();
+    async function startPlayer() {
+      await setupTrackPlayer();
+      const startSetup = await setupStartSettings();
+      setStartSettings(startSetup);
     }
-  }, [notification]);
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      SplashScreen.hideAsync();
-      setSetupOn(true);
-    }, 2000);
-
-    return () => clearTimeout(timeoutId);
+    startPlayer();
   }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SafeAreaView className="flex-1">
+      <SafeAreaView className="flex-1" onLayout={onLayoutRootView}>
         <StatusBar
           backgroundColor={colors.background}
           barStyle="dark-content"
         />
-        {fontsLoaded && setupOn && <Routes />}
+        {fontsLoaded && <Routes />}
       </SafeAreaView>
     </QueryClientProvider>
   );
