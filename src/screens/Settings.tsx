@@ -23,7 +23,7 @@ import { InputField } from "@/components/InputField";
 import { WarningModal } from "@/components/WarningModal";
 
 import { appDataStore, SettingsProps } from "@/services/store";
-import { ScheduleNotifications, VerifyNotifications } from "@/services/setup";
+import { scheduleNotifications, verifyNotifications } from "@/services/setup";
 
 import { colors } from "@/styles/colors";
 
@@ -134,9 +134,9 @@ export function Settings() {
     try {
       const isNotification = !notification;
       if (isNotification) {
-        const hasPermission = await VerifyNotifications();
+        const hasPermission = await verifyNotifications();
         if (hasPermission) {
-          const isScheduled = await ScheduleNotifications();
+          const isScheduled = await scheduleNotifications();
           if (isScheduled) {
             setWarning({
               height: 200,

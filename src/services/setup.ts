@@ -6,17 +6,11 @@ import TrackPlayer, {
 import * as Notifications from "expo-notifications";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { DataBibleProps, SettingsProps } from "./store";
-import { bible } from "./api";
+import { SettingsProps } from "./store";
 
 const ASYNC_KEY = process.env.EXPO_PUBLIC_ASYNC_KEY;
 
-type StartSettingsProps = {
-  settings: SettingsProps;
-  bible: DataBibleProps;
-};
-
-export async function SetupTrackPlayer(): Promise<boolean> {
+export async function setupTrackPlayer(): Promise<boolean> {
   let isSetup = false;
 
   try {
@@ -38,8 +32,16 @@ export async function SetupTrackPlayer(): Promise<boolean> {
   }
 }
 
-export async function VerifyNotifications() {
-  const settings = await Notifications.getPermissionsAsync();
+export async function verifyNotifications(): Promise<boolean> {
+  await Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: true,
+    }),
+  });
+
+  const { granted } = await Notifications.getPermissionsAsync();
 
   if (Platform.OS === "android") {
     await Notifications.setNotificationChannelAsync("default", {
@@ -49,34 +51,27 @@ export async function VerifyNotifications() {
     });
   }
 
+  if (granted) {
+    return granted;
+  }
+
+  const { granted: newGranted, ios } =
+    await Notifications.requestPermissionsAsync({
+      ios: {
+        allowAlert: true,
+        allowBadge: true,
+        allowSound: true,
+        allowAnnouncements: true,
+      },
+    });
+
   return (
-    settings.granted ||
-    settings.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL
+    newGranted ||
+    ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL
   );
 }
 
-export async function SetupNotifications(): Promise<boolean> {
-  await Notifications.setNotificationHandler({
-    handleNotification: async () => ({
-      shouldShowAlert: true,
-      shouldPlaySound: true,
-      shouldSetBadge: true,
-    }),
-  });
-
-  await Notifications.requestPermissionsAsync({
-    ios: {
-      allowAlert: true,
-      allowBadge: true,
-      allowSound: true,
-      allowAnnouncements: true,
-    },
-  });
-
-  return true;
-}
-
-export async function ScheduleNotifications(): Promise<boolean> {
+export async function scheduleNotifications(): Promise<boolean> {
   const days = [2, 3, 4, 5, 6];
   return await Promise.all(
     days.map(async (day) => {
@@ -104,48 +99,26 @@ export async function ScheduleNotifications(): Promise<boolean> {
     });
 }
 
-export async function CheckActiveNotifications() {
+export async function checkActiveNotifications() {
   const settings = await Notifications.getAllScheduledNotificationsAsync();
   if (settings.length < 4) {
     await Notifications.cancelAllScheduledNotificationsAsync();
-    await ScheduleNotifications();
+    await scheduleNotifications();
   }
 }
 
-export async function SetupStartSettings(): Promise<StartSettingsProps> {
-  let data = {} as StartSettingsProps;
-
+export async function setupStartSettings(): Promise<SettingsProps> {
   try {
     const response = await AsyncStorage.getItem(ASYNC_KEY as string);
-    const settings = response ? JSON.parse(response) : ({} as SettingsProps);
-    const { data } = await bible.get("/verses/ra/random").catch(() => {
-      return {
-        data: {
-          book: {
-            name: "Eclesiastes",
-          },
-          chapter: 9,
-          number: 10,
-          text: "Posso todas as coisas em Cristo que me fortalece.",
-        },
-      };
-    });
+    const settings: SettingsProps = response ? JSON.parse(response) : {};
 
-    let bibleData = {} as DataBibleProps;
-    if (typeof data === "object" && Object.keys(data).length > 0) {
-      bibleData = {
-        book: data.book.name,
-        chapter: data.chapter,
-        number: data.number,
-        text: data.text,
-      };
+    if (Object.keys(settings).length !== 0 && settings.notification === true) {
+      await checkActiveNotifications();
     }
-    return {
-      settings,
-      bible: bibleData,
-    };
+
+    return settings;
   } catch (error) {
     console.log(error);
+    return {} as SettingsProps;
   }
-  return data;
 }
