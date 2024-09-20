@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import { Keyboard } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
@@ -46,20 +44,7 @@ function SearchScreen() {
 }
 
 export function AppRoute() {
-  const [showKeyboard, setShowKeyboard] = useState<boolean | undefined>(
-    undefined
-  );
   const { Navigator, Screen } = createBottomTabNavigator();
-
-  useEffect(() => {
-    Keyboard.addListener("keyboardDidHide", () => setShowKeyboard(false));
-    Keyboard.addListener("keyboardDidShow", () => setShowKeyboard(true));
-
-    return () => {
-      Keyboard.removeAllListeners("keyboardDidHide");
-      Keyboard.removeAllListeners("keyboardDidShow");
-    };
-  }, []);
 
   return (
     <Navigator
@@ -107,7 +92,7 @@ export function AppRoute() {
         component={PlayButton}
         options={{
           tabBarLabel: "",
-          tabBarButton: () => (showKeyboard ? null : <PlayButton />),
+          tabBarButton: () => <PlayButton />,
         }}
       />
       <Screen
