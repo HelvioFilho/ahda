@@ -34,6 +34,8 @@ export function WarningModal({
         <Pressable
           onPress={closeModal}
           className="absolute top-2 right-2 p-2 z-20"
+          accessibilityLabel="Fechar aviso"
+          accessibilityRole="button"
         >
           <Ionicons name="close-circle" size={30} color={colors.error} />
         </Pressable>
@@ -44,6 +46,8 @@ export function WarningModal({
             className="w-11/12 h-10 justify-center items-center rounded-xl bg"
             style={{ backgroundColor: colorButton }}
             onPress={closeModal}
+            accessibilityLabel="Fechar"
+            accessibilityRole="button"
           >
             <Text className="text-base font-regular text-light">Fechar</Text>
           </Pressable>
