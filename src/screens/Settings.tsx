@@ -228,6 +228,9 @@ export function Settings() {
               value={name}
               autoCorrect={false}
               error={nameError}
+              accessibilityLabel="Campo de nome"
+              accessibilityHint="Insira seu nome"
+              accessibilityRole="text"
             >
               <Pressable
                 className="relative w-14 h-14 top-0 left-5 rounded-r-md justify-center items-center border-l-4 border-l-background bg-success"
@@ -242,6 +245,8 @@ export function Settings() {
                   }
                   handleChangedName;
                 }}
+                accessibilityLabel="Salvar nome"
+                accessibilityRole="button"
               >
                 {!isSubmittingName ? (
                   <Entypo name="save" size={28} color={colors.light} />
@@ -260,6 +265,9 @@ export function Settings() {
               autoCapitalize="none"
               keyboardType="email-address"
               error={emailError}
+              accessibilityLabel="Campo de e-mail"
+              accessibilityHint="Insira seu e-mail"
+              accessibilityRole="text"
             >
               <Pressable
                 className="relative w-14 h-14 top-0 left-5 rounded-r-md justify-center items-center border-l-4 border-l-background bg-success"
@@ -273,6 +281,8 @@ export function Settings() {
                     }, 800);
                   }
                 }}
+                accessibilityLabel="Salvar e-mail"
+                accessibilityRole="button"
               >
                 {!isSubmittingEmail ? (
                   <Entypo name="save" size={28} color={colors.light} />
@@ -295,6 +305,9 @@ export function Settings() {
                 onValueChange={handleChangedNotification}
                 thumbColor={colors.textLight}
                 value={notification}
+                accessibilityLabel="Ativar notificações"
+                accessibilityHint="Ativa ou desativa notificações sobre o início do programa"
+                accessibilityRole="switch"
               />
             </View>
           </View>
@@ -302,6 +315,8 @@ export function Settings() {
             <Pressable
               className="py-2.5 px-6 rounded-3xl bg-success"
               onPress={() => setVisibleAbout(true)}
+              accessibilityLabel="Sobre o aplicativo"
+              accessibilityRole="button"
             >
               <Text className="text-base font-regular text-light">
                 Sobre o Aplicativo

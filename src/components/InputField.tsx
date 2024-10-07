@@ -1,10 +1,20 @@
-import { Text, TextInput, TextInputProps, View } from "react-native";
+import {
+  Text,
+  TextInput,
+  TextInputProps,
+  View,
+  AccessibilityRole,
+} from "react-native";
 
 type InputFieldProps = TextInputProps & {
   label: string;
   error: string | undefined;
   changeHeight?: number;
   children?: React.ReactNode;
+  accessible?: boolean;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
+  accessibilityRole?: AccessibilityRole;
 };
 
 export function InputField({
@@ -12,11 +22,18 @@ export function InputField({
   error,
   changeHeight = 50,
   children,
+  accessible = true,
+  accessibilityLabel,
+  accessibilityHint,
+  accessibilityRole,
   ...rest
 }: InputFieldProps) {
   return (
     <View className="mb-4">
-      <Text className="text-base font-medium text-textDefault mb-2">
+      <Text
+        className="text-base font-medium text-textDefault mb-2"
+        accessible={false}
+      >
         {label}
       </Text>
       <View
@@ -25,12 +42,22 @@ export function InputField({
       >
         <TextInput
           className="flex-1 h-full text-base text-inputField font-regular"
+          accessible={accessible}
+          accessibilityLabel={accessibilityLabel || label}
+          accessibilityHint={accessibilityHint}
+          accessibilityRole={accessibilityRole}
           {...rest}
         />
         {children && children}
       </View>
       {error && (
-        <Text className="text-base font-regular text-error mt-1">{error}</Text>
+        <Text
+          className="text-base font-regular text-error mt-1"
+          accessibilityLiveRegion="polite"
+          accessibilityRole="alert"
+        >
+          {error}
+        </Text>
       )}
     </View>
   );
