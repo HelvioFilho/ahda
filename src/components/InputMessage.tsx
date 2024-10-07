@@ -21,7 +21,10 @@ export function InputMessage<T extends FieldValues>({
 }: InputMessageProps<T>) {
   return (
     <View className="mb-4">
-      <Text className="text-base text-textDefault font-medium mb-2">
+      <Text
+        className="text-base text-textDefault font-medium mb-2"
+        accessible={false}
+      >
         {label}
       </Text>
       <View
@@ -43,7 +46,13 @@ export function InputMessage<T extends FieldValues>({
         {children && children}
       </View>
       {error && (
-        <Text className="text-base text-error font-regular mt-1">{error}</Text>
+        <Text
+          className="text-base text-error font-regular mt-1"
+          accessibilityLiveRegion="polite"
+          accessibilityRole="alert"
+        >
+          {error}
+        </Text>
       )}
     </View>
   );

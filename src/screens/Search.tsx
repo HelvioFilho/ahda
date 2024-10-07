@@ -92,11 +92,17 @@ export function Search() {
               control={control}
               name="search"
               error={errors.search && (errors.search.message as string)}
+              accessible={true}
+              accessibilityLabel="Campo de busca"
+              accessibilityHint="Digite sua busca e pressione o botão de buscar"
+              accessibilityRole="search"
             >
               <Pressable
-                className="relative top-0 left-5 p-3 h-12 border-l-4 border-l-background bg-success"
+                className="relative top-0 left-6 p-3 h-14 rounded-r-sm border-l-4 border-l-background bg-success"
                 disabled={isSearch}
                 onPress={handleSubmit(handleSearch)}
+                accessibilityLabel="Buscar"
+                accessibilityRole="button"
               >
                 <MaterialCommunityIcons
                   name="magnify"
@@ -125,13 +131,15 @@ export function Search() {
               ListEmptyComponent={
                 <View className="py-5 px-6">
                   {search !== "" && (
-                    <Text className="text-base">
+                    <Text className="text-base" accessibilityRole="text">
                       Nenhuma publicação corresponde a pesquisa, verifique a
                       ortografia ou tente uma combinação diferente de palavras!
                     </Text>
                   )}
                 </View>
               }
+              accessibilityLabel="Lista de resultados de busca"
+              accessibilityRole="list"
             />
           )}
         </View>
