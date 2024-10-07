@@ -12,7 +12,12 @@ export function About({ closeModal }: AboutProps) {
   return (
     <View className="flex-1 h-full justify-center items-center bg-backgroundModal">
       <View className="w-11/12 rounded-3xl p-4 bg-light">
-        <Pressable className="self-end" onPress={closeModal}>
+        <Pressable
+          className="self-end"
+          onPress={closeModal}
+          accessibilityLabel="Fechar sobre o aplicativo"
+          accessibilityRole="button"
+        >
           <Ionicons name="close-circle" size={30} color={colors.error} />
         </Pressable>
         <View className="w-11/12 pt-1 pr-1 pb-8 pl-4">
@@ -36,6 +41,8 @@ export function About({ closeModal }: AboutProps) {
           <Pressable
             className="self-center justify-center pt-2.5"
             onPress={() => Linking.openURL("https://www.hsvf.com.br")}
+            accessibilityLabel="Abrir site hsvf.com.br"
+            accessibilityRole="link"
           >
             <Text className="text-base font-bold text-tabBarColor-active">
               www.hsvf.com.br
