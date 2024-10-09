@@ -177,6 +177,8 @@ export function PlayButton() {
             <Pressable
               className="w-16 h-16 rounded-full items-center justify-center"
               onPress={() => setVisible(true)}
+              accessibilityLabel="Mostrar mensagem de erro"
+              accessibilityRole="button"
             >
               <FontAwesome name="exclamation" size={24} color={colors.light} />
             </Pressable>
@@ -188,6 +190,8 @@ export function PlayButton() {
                 togglePlayback(playbackState.state)
               }
               disabled={loading}
+              accessibilityLabel="Pausar ou Reproduzir"
+              accessibilityRole="button"
             >
               {loading ? (
                 <Loading player size={20} />
