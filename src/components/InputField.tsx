@@ -20,7 +20,7 @@ type InputFieldProps = TextInputProps & {
 export function InputField({
   label,
   error,
-  changeHeight = 50,
+  changeHeight = 56,
   children,
   accessible = true,
   accessibilityLabel,
@@ -37,11 +37,11 @@ export function InputField({
         {label}
       </Text>
       <View
-        className="w-full flex-row items-center px-5 py-2.5 bg-light border border-inputBorder rounded-md"
+        className="w-full flex-row items-center px-5 py-1 bg-light border border-inputBorder rounded-md"
         style={{ height: changeHeight }}
       >
         <TextInput
-          className="flex-1 h-full text-base text-inputField font-regular"
+          className="flex-1 h-12 text-base text-inputField font-regular"
           accessible={accessible}
           accessibilityLabel={accessibilityLabel || label}
           accessibilityHint={accessibilityHint}

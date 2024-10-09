@@ -33,7 +33,7 @@ export function WarningModal({
       >
         <Pressable
           onPress={closeModal}
-          className="absolute top-2 right-2 p-2 z-20"
+          className="absolute top-2 right-2 w-12 h-12 z-20 items-center justify-center"
           accessibilityLabel="Fechar aviso"
           accessibilityRole="button"
         >

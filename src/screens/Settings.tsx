@@ -233,7 +233,7 @@ export function Settings() {
               accessibilityRole="text"
             >
               <Pressable
-                className="relative w-14 h-14 top-0 left-5 rounded-r-md justify-center items-center border-l-4 border-l-background bg-success"
+                className="relative w-16 h-16 top-0 left-5 rounded-r-md justify-center items-center border-l-4 border-l-background bg-success"
                 disabled={isSubmittingName}
                 onPress={() => {
                   if (startSettings.name !== name) {
@@ -270,7 +270,7 @@ export function Settings() {
               accessibilityRole="text"
             >
               <Pressable
-                className="relative w-14 h-14 top-0 left-5 rounded-r-md justify-center items-center border-l-4 border-l-background bg-success"
+                className="relative w-16 h-16 top-0 left-5 rounded-r-md justify-center items-center border-l-4 border-l-background bg-success"
                 disabled={isSubmittingEmail}
                 onPress={() => {
                   if (startSettings.email !== email) {
@@ -300,7 +300,10 @@ export function Settings() {
                   false: colors.error,
                   true: colors.success,
                 }}
-                style={{ transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
+                style={{
+                  transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }],
+                  height: 48,
+                }}
                 ios_backgroundColor={colors.background}
                 onValueChange={handleChangedNotification}
                 thumbColor={colors.textLight}

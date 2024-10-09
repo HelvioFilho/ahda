@@ -13,7 +13,7 @@ export function About({ closeModal }: AboutProps) {
     <View className="flex-1 h-full justify-center items-center bg-backgroundModal">
       <View className="w-11/12 rounded-3xl p-4 bg-light">
         <Pressable
-          className="self-end"
+          className="self-end w-14 h-14 items-center justify-center"
           onPress={closeModal}
           accessibilityLabel="Fechar sobre o aplicativo"
           accessibilityRole="button"
@@ -39,7 +39,7 @@ export function About({ closeModal }: AboutProps) {
             <Text className="text-base font-regular ml-1">Hélvio Filho</Text>
           </View>
           <Pressable
-            className="self-center justify-center pt-2.5"
+            className="self-center justify-center h-12 pt-2.5"
             onPress={() => Linking.openURL("https://www.hsvf.com.br")}
             accessibilityLabel="Abrir site hsvf.com.br"
             accessibilityRole="link"

@@ -64,8 +64,13 @@ export function BibleModal() {
         <View className="w-11/12 justify-around items-center bg-light rounded-3xl pb-5">
           <View className="w-full flex-row justify-between items-center pt-5">
             <View />
-            <Text className="text-xl font-bold self-end">Versículo do dia</Text>
-            <Pressable className="pr-3" onPress={() => setVisible(false)}>
+            <Text className="text-xl font-bold self-end pl-3">
+              Versículo do dia
+            </Text>
+            <Pressable
+              className="pr-3 w-14 h-14 items-center justify-center"
+              onPress={() => setVisible(false)}
+            >
               <Ionicons name="close-circle" size={30} color={colors.error} />
             </Pressable>
           </View>
