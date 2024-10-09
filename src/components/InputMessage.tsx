@@ -15,7 +15,7 @@ export function InputMessage<T extends FieldValues>({
   label,
   control,
   error,
-  changeHeight = 50,
+  changeHeight = 56,
   children,
   ...rest
 }: InputMessageProps<T>) {
@@ -28,7 +28,7 @@ export function InputMessage<T extends FieldValues>({
         {label}
       </Text>
       <View
-        className="w-full flex-row items-center px-5 py-2.5 bg-light border border-inputBorder rounded-md"
+        className="w-full flex-row items-center px-5 py-1 bg-light border border-inputBorder rounded-md"
         style={{ height: changeHeight }}
       >
         <Controller

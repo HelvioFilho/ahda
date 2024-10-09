@@ -45,7 +45,7 @@ type DataForm = {
 };
 
 export function Message() {
-  const [inputHeight, setInputHeight] = useState(50);
+  const [inputHeight, setInputHeight] = useState(56);
   const [visible, setVisible] = useState(false);
   const [warning, setWarning] = useState<WarningProps>({} as WarningProps);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -135,14 +135,26 @@ export function Message() {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View className="flex-1 bg-background">
             <View className="relative top-5 flex-row justify-between px-5">
-              <Image className="w-28 h-28" source={SendRight} />
+              <Image
+                className="w-28 h-28"
+                source={SendRight}
+                accessible={false}
+              />
               <Image
                 className="absolute top-14 left-1/2 transform -translate-x-[35px] w-32 h-10"
                 source={AngelHaloImage}
+                accessible={false}
               />
-              <Image className="w-28 h-28" source={SendLeft} />
+              <Image
+                className="w-28 h-28"
+                source={SendLeft}
+                accessible={false}
+              />
             </View>
-            <Text className="text-xl font-bold text-center mt-5">
+            <Text
+              className="text-xl font-bold text-center mt-5"
+              accessibilityRole="header"
+            >
               Nos envie{"\n"}uma mensagem!
             </Text>
             <Text className="text-base font-regular my-2.5 mx-5 ">
@@ -157,6 +169,10 @@ export function Message() {
                 control={control}
                 autoCorrect={false}
                 error={errors.name && (errors.name.message as string)}
+                accessible={true}
+                accessibilityLabel="Campo de nome"
+                accessibilityHint="Digite seu nome"
+                accessibilityRole="text"
               />
               <InputMessage
                 placeholder="E-mail"
@@ -166,6 +182,10 @@ export function Message() {
                 autoCapitalize="none"
                 keyboardType="email-address"
                 error={errors.email && (errors.email.message as string)}
+                accessible={true}
+                accessibilityLabel="Campo de e-mail"
+                accessibilityHint="Digite seu e-mail (opcional)"
+                accessibilityRole="text"
               />
               <InputMessage
                 placeholder="Sua mensagem"
@@ -178,11 +198,18 @@ export function Message() {
                 onContentSizeChange={(e) =>
                   setInputHeight(e.nativeEvent.contentSize.height + 30)
                 }
+                accessible={true}
+                accessibilityLabel="Campo de mensagem"
+                accessibilityHint="Digite sua mensagem"
+                accessibilityRole="text"
               />
               <Pressable
                 className="w-full h-14 justify-center items-center rounded-md mt-2.5 mb-44 bg-success"
                 disabled={isSubmitting}
                 onPress={handleSubmit(handleSendMessage)}
+                accessibilityLabel="Enviar mensagem"
+                accessibilityRole="button"
+                accessibilityState={{ disabled: isSubmitting }}
               >
                 {isSubmitting ? (
                   <Loading size={24} player={true} />
