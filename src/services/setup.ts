@@ -61,7 +61,7 @@ export async function verifyNotifications(): Promise<boolean> {
         allowAlert: true,
         allowBadge: true,
         allowSound: true,
-        allowAnnouncements: true,
+        allowDisplayInCarPlay: true,
       },
     });
 
@@ -72,31 +72,35 @@ export async function verifyNotifications(): Promise<boolean> {
 }
 
 export async function scheduleNotifications(): Promise<boolean> {
-  const days = [2, 3, 4, 5, 6];
-  return await Promise.all(
-    days.map(async (day) => {
-      await Notifications.scheduleNotificationAsync({
-        identifier: `program${day}`,
-        content: {
-          title: "A hora do anjo",
-          body: "O programa começará em 5 minutos.",
-          sound: true,
-          priority: Notifications.AndroidNotificationPriority.HIGH,
-        },
-        trigger: {
-          hour: 17,
-          minute: 55,
-          weekday: day,
-          repeats: true,
-        },
-      });
-    })
-  )
-    .then(() => true)
-    .catch((error) => {
-      console.log(`Algo deu errado e não foi possível registrar: ${error}`);
-      return false;
-    });
+  const weekdays = [2, 3, 4, 5, 6] as const;
+
+  try {
+    await Promise.all(
+      weekdays.map((weekday) =>
+        Notifications.scheduleNotificationAsync({
+          identifier: `program${weekday}`,
+          content: {
+            title: "A hora do anjo",
+            body: "O programa começará em 5 minutos.",
+            sound: true,
+            priority: Notifications.AndroidNotificationPriority.HIGH,
+          },
+          trigger: {
+            type: Notifications.SchedulableTriggerInputTypes.WEEKLY,
+            weekday,
+            hour: 17,
+            minute: 55,
+          },
+        })
+      )
+    );
+    return true;
+  } catch (error) {
+    console.log(
+      `Algo deu errado e não foi possível registrar notificações: ${error}`
+    );
+    return false;
+  }
 }
 
 export async function checkActiveNotifications() {
