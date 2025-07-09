@@ -1,7 +1,7 @@
 import TrackPlayer from "react-native-track-player";
 import { playbackService } from "@/utils/playbackService";
 
-import registerRootComponent from "expo/build/launch/registerRootComponent";
+import { registerRootComponent } from "expo";
 
 import App from "./App";
 
